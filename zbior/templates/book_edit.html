@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} CRUD {% endblock %}
+{% block content %}
+    {% for instance in object_list %}
+        {{ instance.author }} - {{ instance.title }}
+        <input class="btn btn-primary" type="button" value="Edit" onclick="location.href='/edit/{{ instance.id }}'">
+        <input class="btn btn-primary" type="button" value="Delete">
+        <input class="btn btn-primary" type="button" value="Show">
+        <br>
+        <br>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %} CRUD {% endblock %}
+{% block content %}
+<form method="post"> {% csrf_token %}
+    Do you want to delete object?
+    <input type="submit" value="Yes"> <a href="../">Go back</a>
+
+</form>
+{% endblock %}

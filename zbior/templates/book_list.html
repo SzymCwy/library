@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %} Book List {% endblock %}
+{% block content %}
+    <table class="tab">
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date of publishing</th>
+                <th>ISBN Number</th>
+                <th>Number of pages</th>
+                <th>Cover link</th>
+                <th>Publishing language</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+    {% for instance in object_list %}
+            <tr>
+                <td>{{ instance.title }}</td>
+                <td>{{ instance.author }}</td>
+                <td>{{ instance.publish_date }}</td>
+                <td>{{ instance.ISBN_Number }}</td>
+                <td>{{ instance.number_of_pages }}</td>
+                <td> <a href="{{ instance.cover_link }}">Link</a> </td>
+                <td>{{ instance.publish_language }}</td>
+                <td><input class="btn btn-primary" type="button" value="Edit" onclick="location.href='/edit/{{ instance.id }}'"></td>
+                <td><input class="btn btn-primary" type="button" value="Delete" onclick="location.href='/delete/{{ instance.id }}'"></td>
+            </tr>
+        {% endfor %}
+     </table>
+{% endblock %}
+{% block search %}
+<form method="get">
+    <input type="text" name="search" placeholder="Search for keyword...">
+    <label for="date_from">Date From:</label>
+    <input type="date" name="date_from">
+    <label for="date_till">Date till:</label>
+    <input type="date" name="date_till">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort">
+        <option value="" selected disabled hidden>Choose order</option>
+        <optgroup label="By author">
+            <option value="Author_ascending">Author ascending</option>
+            <option value="Author_descending">Author descending</option>
+        </optgroup>
+        <optgroup label="By title">
+            <option value="Title_ascending">Title ascending</option>
+            <option value="Title_descending">Title descending</option>
+        </optgroup>
+        <optgroup label="By language">
+            <option value="Language_ascending">Language ascending</option>
+            <option value="Language_descending">Language descending</option>
+        </optgroup>
+        <optgroup label="By date">
+            <option value="Date_ascending">Date ascending</option>
+            <option value="Date_descending">Date descending</option>
+        </optgroup>
+    </select>
+    <input type="submit" value="Search">
+</form>
+{% endblock %}

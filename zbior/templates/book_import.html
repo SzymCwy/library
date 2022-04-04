@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} Import Book {% endblock %}
+
+{% block content %}
+    <table class="tab">
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date of publishing</th>
+                <th>Import</th>
+            </tr>
+    {% for book in books %}
+
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publish_date }}</td>
+                <td>
+                    <form name="import_form">
+                        <button type="submit" name="import" value="{{ book.id }}">Import</button>
+
+                    </form>
+                </td>
+            </tr>
+
+        {% endfor %}
+     </table>
+{% endblock %}
+
+{% block search %}
+<form>
+    <input type="text" name="search" placeholder="Search for keyword...">
+    <input type="submit" value="Search">
+</form>
+{% endblock %}
