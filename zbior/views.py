@@ -78,7 +78,7 @@ def books_delete(request, my_id):
 
 
 def book_import(request):
-    api_key = 'AIzaSyCdeIfC04XTzYUlad2xedyJ6eEGFu2jIVc'
+    api_key = os.getenv('API')
     if request.GET.get('import') is not None:
         import_book = request.GET.get('import')
         book_query = requests.get(f'https://www.googleapis.com/books/v1/volumes/{import_book}').json()
