@@ -15,10 +15,16 @@ def date_from_universal(date):
     return correct_date
 
 
+
+
+
 def date_till_universal(date):
     mapping = {None: datetime.date.today(), '': datetime.date.today()}
     correct_date = mapping[date] if date in mapping else date_validate(date)
     return correct_date
+
+
+"""Both functions are securing not to pass None or "" value"""
 
 
 def correct_date_range(date_from, date_till):
