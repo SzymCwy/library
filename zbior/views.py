@@ -1,13 +1,15 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Book
-from .forms import Book_update_form, Book_create_form
+from .forms import BookCreateForm
 from .serializers import Book_serializer
 import requests
 from dateutil import parser
 from .utils import date_from_universal, date_till_universal, correct_date_range, book_import_query, order_list
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import os
+from django.views.generic.edit import UpdateView
 
 
 def books_list_view(request):
@@ -17,10 +19,10 @@ def books_list_view(request):
         date_from = date_from_universal(request.GET.get('date_from'))
 
         if date_till is None or date_from is None:
-            return render(request, 'error.html', {'error': 'Wrong query - wrong date format'})
+            return render(request, 'book_list.html', {'error': 'Wrong query - wrong date format'})
 
         if correct_date_range(date_from, date_till):
-            return render(request, 'error.html', {'error': 'Wrong query - date_from < date_till'})
+            return render(request, 'book_list.html', {'error': 'Wrong query - date_from < date_till'})
 
         if request.GET.get('search') is None:
             """If there are no query params for searching the view is displaying list of all books"""
@@ -40,25 +42,14 @@ def books_list_view(request):
         return render(request, 'book_list.html', context)
 
 
-def books_edit(request, my_id):
-    obj = get_object_or_404(Book, id=my_id)
-    obj2 = get_object_or_404(Book, id=my_id)
-    form = Book_update_form(instance=obj, data=request.POST or None)
-    if request.method == 'POST':
-        Book.delete(obj)
-        if form.is_valid():
-            form.save()
-            print(obj)
-        else:
-            Book.save(obj2)
-    context = {
-        'form': form
-    }
-    return render(request, 'book_update.html', context)
+class BooksEdit(UpdateView):
+    model = Book
+    fields = '__all__'
+    success_url = "/"
 
 
 def books_create(request):
-    form = Book_create_form(data=request.POST or None)
+    form = BookCreateForm(data=request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             form.save()
@@ -78,13 +69,13 @@ def books_delete(request, my_id):
 
 
 def book_import(request):
-    api_key = os.getenv('API') #api stored in .env
+    api_key = os.getenv('API')
     if request.GET.get('import') is not None:
         import_book = request.GET.get('import')
         book_query = requests.get(f'https://www.googleapis.com/books/v1/volumes/{import_book}').json()
         book_dict = book_import_query(book_query)
         if Book.objects.all().filter(ISBN_Number=book_dict['ISBN']).exists():
-            return render(request, 'error.html', context={'error': 'This book already exists!'})
+            return render(request, 'book_list.html', context={'error': 'This book already exists!'})
         else:
             imported_book = Book.objects.create(author=book_dict['author'], title=book_dict['title'],
                                                 publish_date=parser.parse(book_dict['publish_date']),
@@ -118,7 +109,7 @@ def book_import(request):
         return render(request, 'book_import.html')
 
 
-class Book_API(APIView):
+class BookApi(APIView):
 
     def get(self, request):
         date_till = date_till_universal(self.request.query_params.get('date_till'))

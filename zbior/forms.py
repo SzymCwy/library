@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 import datetime
 
 
-class Book_update_form(forms.ModelForm):
+class BookUpdateForm(forms.ModelForm):
     class Meta:
         """Using all book model fields and widget to make app more coherent """
         model = Book
@@ -36,7 +36,7 @@ class Book_update_form(forms.ModelForm):
             return ISBN_number
 
 
-class Book_create_form(forms.ModelForm):
+class BookCreateForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = '__all__'

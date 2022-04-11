@@ -7,7 +7,7 @@ def date_validator(value):
         raise ValidationError('The book publish date cannot be in the future!')
 
 
-def ISBN_validator(value):
+def isbn_validator(value):
     ISBN = str(value)
     if len(ISBN) != 13 and len(ISBN) != 10:
         raise ValidationError('Incorrect ISBN')

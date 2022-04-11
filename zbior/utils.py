@@ -3,7 +3,7 @@ import datetime
 
 def date_validate(date):
     try:
-        datetime.datetime.strptime(date, '%Y-%m-%d')
+        date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
         return date
     except ValueError:
         return None
@@ -13,9 +13,6 @@ def date_from_universal(date):
     mapping = {None: datetime.date(1800, 1, 1), '': datetime.date(1800, 1, 1)}
     correct_date = mapping[date] if date in mapping else date_validate(date)
     return correct_date
-
-
-
 
 
 def date_till_universal(date):
@@ -54,5 +51,3 @@ def order_list(queryset):
                'Language_descending': '-publish_language', 'Date_ascending': 'publish_date',
                'Date_descending': '-publish_date', '': 'author', None: 'author'}
     return mapping[queryset]
-
-

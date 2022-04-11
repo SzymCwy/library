@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block title %} Book List {% endblock %}
 {% block content %}
+    <div>
+    {% if error != null  %}
+        <script>
+            alert("{{ error }}");
+        </script>
+    {% endif %}
+    </div>
     <table class="tab">
             <tr>
                 <th>Title</th>
